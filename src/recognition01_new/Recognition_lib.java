@@ -42,6 +42,8 @@ public class Recognition_lib {
 		// TODO Auto-generated method stub
 		//===json
 		ObjectMapper mapper = new ObjectMapper();
+		MySQL mysql = new MySQL();
+
 		JsonNode node = null;
 		try {
 			node = mapper.readTree(String.valueOf(result));
@@ -50,10 +52,21 @@ public class Recognition_lib {
 			e.printStackTrace();
 		}
 		int age_min = node.get("images").get(0).get("faces").get(0).get("age").get("min").asInt();
+		int age_max = node.get("images").get(0).get("faces").get(0).get("age").get("max").asInt();
+		double age_score = node.get("images").get(0).get("faces").get(0).get("age").get("score").doubleValue();
+		int gender;
 		if(node.get("images").get(0).get("faces").get(0).get("gender").get("gender").toString() == "MALE") {
+			gender = 0;
 		}else{
+			gender = 1;
 		}
-		System.out.println("age_min : " + age_min);
+		double gender_score = node.get("images").get(0).get("faces").get(0).get("gender").get("score").doubleValue();
+		 System.out.println("age_min : " + age_min);
+
+
+		 mysql.updateImage(age_min,age_max,age_score,gender,gender_score);
+
+
 
 	}
 	
